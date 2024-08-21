@@ -6,7 +6,7 @@ import com.example.fdjproject.domain.interactors.GetAllLeaguesUseCase
 import com.example.fdjproject.domain.interactors.GetTeamsByLeagueUseCase
 import com.example.fdjproject.domain.models.League
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +20,7 @@ import javax.inject.Inject
 internal class SportsViewModel @Inject constructor(
     private val getAllLeaguesUseCase: GetAllLeaguesUseCase,
     private val getTeamsByLeagueUseCase: GetTeamsByLeagueUseCase,
+    private val dispatcher: CoroutineDispatcher,
 ): ViewModel() {
 
     private val _leaguesState = MutableStateFlow<List<League>>(emptyList())
@@ -36,7 +37,7 @@ internal class SportsViewModel @Inject constructor(
     }
 
     private fun retrieveAllLeagues() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             getAllLeaguesUseCase().fold(
                 onSuccess = {
                     _leaguesState.value = it
@@ -53,7 +54,7 @@ internal class SportsViewModel @Inject constructor(
     }
 
     fun retrieveTeamsByLeague(league: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             _teamsState.value = TeamsState.Loading
 
             getTeamsByLeagueUseCase(league).fold(
