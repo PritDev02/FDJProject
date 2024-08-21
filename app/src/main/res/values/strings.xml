@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FdjProject</string>
+
+    // Error messages
+    <string name="server_error">An server error occurred</string>
+    <string name="connection_error">A connection error occurred</string>
+    <string name="unknown_error">An unknown error occurred</string>
+</resources>
