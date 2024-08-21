@@ -1,7 +1,5 @@
 package com.example.fdjproject.domain.interactors
 
-import com.example.fdjproject.data.entities.LeagueDetailResponse
-import com.example.fdjproject.data.entities.LeaguesResponse
 import com.example.fdjproject.domain.models.League
 import com.example.fdjproject.domain.repository.SportsRepository
 import io.mockk.coEvery
@@ -28,34 +26,15 @@ class GetAllLeaguesUseCaseTest {
     }
 
     @Test
-    fun `GetAllLeaguesUseCase returns success when repository call is successful`() =
-        testScope.runTest {
-            val leaguesResponse =
-                LeaguesResponse(
-                    listOf(
-                        LeagueDetailResponse(
-                            idLeague = "1",
-                            strLeague = "League 1",
-                            strLeagueAlternate = "League 1",
-                            strSport = "Football"
-                        ),
-                        LeagueDetailResponse(
-                            "2",
-                            "League 2",
-                            strLeagueAlternate = "League 2",
-                            strSport = "Football"
-                        )
-                    )
-                )
-
+    fun `GetAllLeaguesUseCase returns success when repository call is successful`() = testScope.runTest {
             val leagues = listOf(League("League 1"), League("League 2"))
-            coEvery { sportRepository.getAllLeagues() } returns Result.success(leaguesResponse)
+            coEvery { sportRepository.getAllLeagues() } returns Result.success(leagues)
 
             val result = getAllLeaguesUseCase()
 
             assertTrue(result.isSuccess)
             assertEquals(leagues, result.getOrNull())
-        }
+    }
 
     @Test
     fun `GetAllLeaguesUseCase returns failure when repository call is unsuccessful`() =
