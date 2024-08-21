@@ -1,4 +1,4 @@
-package com.example.fdjproject.domain.mapper
+package com.example.fdjproject.data.mapper
 
 import com.example.fdjproject.data.entities.TeamDetailResponse
 import com.example.fdjproject.domain.models.Team

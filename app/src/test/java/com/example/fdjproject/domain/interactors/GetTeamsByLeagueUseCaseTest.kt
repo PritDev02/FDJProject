@@ -1,7 +1,5 @@
 package com.example.fdjproject.domain.interactors
 
-import com.example.fdjproject.data.entities.TeamDetailResponse
-import com.example.fdjproject.data.entities.TeamsResponse
 import com.example.fdjproject.domain.models.Team
 import com.example.fdjproject.domain.repository.SportsRepository
 import io.mockk.coEvery
@@ -29,87 +27,32 @@ class GetTeamsByLeagueUseCaseTest {
         strTeamAlternate = "Team 1 alternate"
     )
 
-    val teamDetail = TeamDetailResponse(
-        idTeam = "1",
-        strTeam = "Team F",
-        idLeague2 = "",
-        idSoccerXML = "",
-        idVenue = "",
-        intFormedYear = "1999",
-        intStadiumCapacity = "99999",
-        strBadge = "www.logo.com",
-        strBanner = "Banner 1",
-        strColour1 = "red",
-        strColour2 = "blue",
-        strColour3 = "green",
-        strCountry = "",
-        strDescriptionEN = "",
-        strDescriptionES = "",
-        strDescriptionFR = "",
-        strDescriptionIT = "",
-        strEquipment = "",
-        strFacebook = "",
-        strFanart1 = "",
-        strFanart2 = "",
-        strFanart3 = "",
-        strFanart4 = "",
-        strGender = "",
-        strInstagram = "",
-        strKeywords = "",
-        strLeague = "",
-        strLeague2 = "",
-        strLeague3 = "",
-        strLeague4 = "",
-        strLeague5 = "",
-        strLeague6 = "",
-        strLeague7 = "",
-        strLocation = "",
-        strLocked = "",
-        strLogo = "www.logo.com",
-        strRSS = "",
-        strSport = "",
-        strStadium = "",
-        strTeamAlternate = "Team 1 alternate",
-        strTeamShort = "",
-        strTwitter = "",
-        strWebsite = "www.test.com",
-        idAPIfootball = "",
-        idLeague = "",
-        strYoutube = "",
-    )
-
     @Before
     fun setUp() {
         getTeamsByLeagueUseCase = GetTeamsByLeagueUseCase(sportRepository)
     }
 
     @Test
-    fun `GetTeamsByLeagueUseCase returns success team list sorted when repository call is successful`() =
+    fun `GetTeamsByLeagueUseCase returns success team list sorted one team out of two when repository call is successful`() =
         testScope.runTest {
             val league = "League 1"
-            val teamsResponse = TeamsResponse(
-                listOf(
-                    teamDetail,
-                    teamDetail.copy(strTeam = "Team A"),
-                    teamDetail.copy(strTeam = "Team B"),
-                    teamDetail.copy(strTeam = "Team Z"),
-                )
+            val teamsMock = listOf(
+                team.copy(strTeam = "Team A"),
+                team.copy(strTeam = "Team F"),
+                team.copy(strTeam = "Team Z"),
+                team.copy(strTeam = "Team B"),
             )
 
-            val teams = listOf(
+            val teamsExpected = listOf(
                 team.copy(strTeam = "Team Z"),
-                team,
                 team.copy(strTeam = "Team B"),
-                team.copy(strTeam = "Team A"),
             )
-            coEvery { sportRepository.getTeamsByLeague(league) } returns Result.success(
-                teamsResponse
-            )
+            coEvery { sportRepository.getTeamsByLeague(league) } returns Result.success(teamsMock)
 
             val result = getTeamsByLeagueUseCase(league)
 
             assertTrue(result.isSuccess)
-            assertEquals(teams, result.getOrNull())
+            assertEquals(teamsExpected, result.getOrNull())
         }
 
     @Test
