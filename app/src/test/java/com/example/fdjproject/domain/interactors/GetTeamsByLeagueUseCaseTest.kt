@@ -84,7 +84,7 @@ class GetTeamsByLeagueUseCaseTest {
     }
 
     @Test
-    fun `GetTeamsByLeagueUseCase returns success team list sorted when repository call is successful`() =
+    fun `GetTeamsByLeagueUseCase returns success team list sorted 1 by 2 when repository call is successful`() =
         testScope.runTest {
             val league = "League 1"
             val teamsResponse = TeamsResponse(
@@ -96,11 +96,9 @@ class GetTeamsByLeagueUseCaseTest {
                 )
             )
 
-            val teams = listOf(
+            val teamsExpected = listOf(
                 team.copy(strTeam = "Team Z"),
-                team,
                 team.copy(strTeam = "Team B"),
-                team.copy(strTeam = "Team A"),
             )
             coEvery { sportRepository.getTeamsByLeague(league) } returns Result.success(
                 teamsResponse
@@ -109,7 +107,7 @@ class GetTeamsByLeagueUseCaseTest {
             val result = getTeamsByLeagueUseCase(league)
 
             assertTrue(result.isSuccess)
-            assertEquals(teams, result.getOrNull())
+            assertEquals(teamsExpected, result.getOrNull())
         }
 
     @Test

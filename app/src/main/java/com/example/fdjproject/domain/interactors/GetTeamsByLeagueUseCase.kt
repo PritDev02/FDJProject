@@ -11,7 +11,9 @@ class GetTeamsByLeagueUseCase @Inject constructor(
     suspend operator fun invoke(league: String): Result<List<Team>> {
         return repository.getTeamsByLeague(league).fold(
             onSuccess = { teamsResponse ->
-                val teams = teamsResponse.teams.map { it.toDomain() }.sortedByDescending { it.strTeam }
+                val teams = teamsResponse.teams.map { it.toDomain() }
+                    .sortedByDescending { it.strTeam }
+                    .filterIndexed { index, _ -> index % 2 == 0 }
                 Result.success(teams)
             },
             onFailure = {
